@@ -83,25 +83,25 @@ const compile = (name: string, defs: core.Defs = {}): string => {
 
   // Compiles all terms of this file
   if (name.slice(-2) === "/@") {
-      var file = name.slice(0, -1);
-      var js_defs = [];
-      for (var def_name in defs) {
-        if (def_name.slice(0, file.length) === file) {
-          go(core.Ref(def_name), 0);
-          js_defs.push([
-            def_name.slice(file.length),
-            js_name(def_name)
-          ]);
-        };
+    var file = name.slice(0, -1);
+    var js_defs = [];
+    for (var def_name in defs) {
+      if (def_name.slice(0, file.length) === file) {
+        go(core.Ref(def_name), 0);
+        js_defs.push([
+          def_name.slice(file.length),
+          js_name(def_name)
+        ]);
+      };
       }
       return "(function(){\n"
-        + code
-        + "  return {\n"
-        + js_defs.map(([k,v]) => "    '"+k+"':"+v).join(",\n")+"\n"
-        + "  };\n"
-        + "})()";
+      + code
+      + "  return {\n"
+      + js_defs.map(([k,v]) => "    '"+k+"':"+v).join(",\n")+"\n"
+      + "  };\n"
+      + "})()";
   } else {
-    var result = go(defs[name], 0);
+    var result = go(core.Ref(name), 0);
     return "(function(){\n"
       + code
       + "  return " + result
